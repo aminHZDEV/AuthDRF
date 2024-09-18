@@ -1,0 +1,14 @@
+setuptools
+django-oauth-toolkit
+djangorestframework
+django
+django-phonenumber-field[phonenumbers]
+drf-pretty-exception-handler
+pytest-drf
+pytest-django
+pytest
+behave
+behave-django
+grpcio
+grpcio-tools
+twilio
