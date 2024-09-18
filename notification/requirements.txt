@@ -1,14 +1,6 @@
-setuptools
-django-oauth-toolkit
-djangorestframework
-django
-django-phonenumber-field[phonenumbers]
-drf-pretty-exception-handler
-pytest-drf
-pytest-django
+setuptools==46.4.0
 pytest
 behave
-behave-django
-grpcio
+grpcio==1.39.0
 grpcio-tools
 twilio

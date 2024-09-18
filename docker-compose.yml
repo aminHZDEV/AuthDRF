@@ -3,21 +3,36 @@ version: '3.8'
 services:
   web:
     build:
-      context: .
+      context: ./auth
       dockerfile: Dockerfile
     command: bash -c "python manage.py makemigrations && python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
     volumes:
-      - .:/app
+      - ./auth:/app
     ports:
       - "8000:8000"
     environment:
       - DJANGO_SETTINGS_MODULE=auth.settings
-
+    depends_on:
+      - otp_service  # Ensure gRPC OTP service is running before web starts
 
   test:
     build:
-      context: .
+      context: ./auth
       dockerfile: Dockerfile
     command: bash -c "pytest && python manage.py behave"
     environment:
       - DJANGO_SETTINGS_MODULE=auth.settings
+    depends_on:
+      - otp_service  # Ensure gRPC OTP service is running before tests start
+
+  otp_service:
+    build:
+      context: ./notification
+      dockerfile: Dockerfile
+    command: python otp.py
+    volumes:
+      - ./notification:/app
+    ports:
+      - "50051:50051"  # gRPC server for OTP service
+    environment:
+      - CONFIG_FILE=/app/config.ini  # Configuration file for gRPC and Twilio

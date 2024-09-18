@@ -1,0 +1,33 @@
+Feature: User Management # features/user_register.feature:1
+
+  Scenario: Register a new user and obtain an access token               # features/user_register.feature:3
+    Given I am a new user                                                # features/steps/user_steps.py:6
+    When I register with the following details                           # features/steps/user_steps.py:10
+      | email       | username  | password      | phone_number  |
+      | amin@son.ir | aminhzdev | adminpassword | +989331109442 |
+    Then I should receive a confirmation with status 201                 # features/steps/user_steps.py:16
+    And the response should contain the following details after register # features/steps/user_steps.py:20
+      | username  | email       | phone_number  |
+      | aminhzdev | amin@son.ir | +989331109442 |
+
+  Scenario: Obtain an access token using credentials            # features/user_register.feature:13
+    Given I am authenticated with the following credentials     # features/steps/user_steps.py:27
+      | username  | password      | phone_number  | email       |
+      | aminhzdev | adminpassword | +989331109442 | amin@son.ir |
+    When I request an access token                              # features/steps/user_steps.py:49
+    Then I should receive a token with status 200               # features/steps/user_steps.py:53
+    And the token response should contain the following details # features/steps/user_steps.py:57
+      | access_token   | expires_in | token_type | scope             |
+      | <access_token> | 3600       | Bearer     | read write groups |
+    And I should store the access token for subsequent requests # features/steps/user_steps.py:71
+
+  Scenario: Retrieve users with the stored access token   # features/user_register.feature:25
+    Given I am authenticated with the stored access token # features/steps/user_steps.py:76
+      | email       | username  | password      | phone_number  |
+      | amin@son.ir | aminhzdev | adminpassword | +989331109442 |
+    When I request the list of users                      # features/steps/user_steps.py:101
+    Then I should receive a list of users with status 200 # features/steps/user_steps.py:106
+    And the response should contain the following details # features/steps/user_steps.py:110
+      | username  | phone_number  | email       |
+      | aminhzdev | +989331109442 | amin@son.ir |
+

@@ -1,4 +1,4 @@
-setuptools
+setuptools==46.4.0
 django-oauth-toolkit
 djangorestframework
 django
@@ -9,3 +9,6 @@ pytest-django
 pytest
 behave
 behave-django
+django-grpc-framework
+grpcio==1.39.0
+grpcio-tools
