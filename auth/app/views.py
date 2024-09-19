@@ -4,7 +4,7 @@ from .serializers import UserSerializer, UserRegisterSerializer
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework import status
-from otp.grpc_client import generate_otp, verify_otp
+from app.otp.grpc_client import generate_otp, verify_otp
 from oauth2_provider.models import AccessToken, Application
 from django.utils.timezone import now
 from datetime import timedelta
@@ -29,9 +29,7 @@ class UserRegister(generics.CreateAPIView):
 
     def create(self, request, *args, **kwargs):
         phone_number = request.data.get('phone_number')
-
         otp_status = generate_otp(phone_number)
-
         if otp_status == "OTP sent":
             return Response({"detail": "OTP sent to your phone. Verify to complete registration."},
                             status=status.HTTP_200_OK)
@@ -45,14 +43,11 @@ class VerifyOTPView(generics.GenericAPIView):
     def post(self, request, *args, **kwargs):
         phone_number = request.data.get('phone_number')
         otp_code = request.data.get('otp_code')
-
         verification_status = verify_otp(phone_number, otp_code)
-
         if verification_status == "OTP verified":
             serializer = UserRegisterSerializer(data=request.data)
             if serializer.is_valid():
                 user = serializer.save()
-
                 app = Application.objects.get(name="Test app")  # Use correct application name
                 token = generate_token()
                 expires = now() + timedelta(hours=1)

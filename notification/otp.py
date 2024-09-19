@@ -4,7 +4,7 @@ import otp_pb2
 import otp_pb2_grpc
 import random
 import configparser
-from twilio.rest import Client
+import ghasedak_sms
 
 config = configparser.ConfigParser()
 config.read('config.ini')
@@ -31,18 +31,22 @@ class OTPServiceServicer(otp_pb2_grpc.OTPServiceServicer):
 
 
 def send_otp_via_sms(phone_number, otp_code):
-    account_sid = config['twilio']['account_sid']
-    auth_token = config['twilio']['auth_token']
-    from_number = config['twilio']['from_number']
+    api_key = config['ghasedak']['api_key']
+    line_number = config['ghasedak']['line_number']
 
-    client = Client(account_sid, auth_token)
+    sms = ghasedak_sms.Ghasedak(api_key)
 
-    message = client.messages.create(
-        body=f'Your OTP is: {otp_code}',
-        from_=from_number,
-        to=phone_number
-    )
-    print(f"Sent OTP {otp_code} to {phone_number}")
+    try:
+        sms.send_single_sms({
+            'message': f'Your OTP is: {otp_code}',
+            'receptor': phone_number,
+            'linenumber': line_number,
+            'senddate': '',
+            'checkid': ''
+        })
+        print(f"Sent OTP {otp_code} to {phone_number}")
+    except Exception as e:
+        print(f"Error sending OTP: {e}")
 
 
 def serve():

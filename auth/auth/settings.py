@@ -42,7 +42,9 @@ INSTALLED_APPS = [
     "rest_framework",
     "app.apps.AppConfig",
     "behave_django",
-    "features"
+    "features",
+    "app.otp.otp_pb2",
+    "app.otp.otp_pb2_grpc"
 ]
 
 TEST_RUNNER = 'django_behave.runner.DjangoBehaveTestSuiteRunner'

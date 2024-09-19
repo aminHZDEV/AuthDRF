@@ -13,7 +13,7 @@ services:
     environment:
       - DJANGO_SETTINGS_MODULE=auth.settings
     depends_on:
-      - otp_service  # Ensure gRPC OTP service is running before web starts
+      - otp_service
 
   test:
     build:
@@ -23,7 +23,7 @@ services:
     environment:
       - DJANGO_SETTINGS_MODULE=auth.settings
     depends_on:
-      - otp_service  # Ensure gRPC OTP service is running before tests start
+      - otp_service
 
   otp_service:
     build:
@@ -33,6 +33,11 @@ services:
     volumes:
       - ./notification:/app
     ports:
-      - "50051:50051"  # gRPC server for OTP service
+      - "50051:50051"
     environment:
-      - CONFIG_FILE=/app/config.ini  # Configuration file for gRPC and Twilio
+      - CONFIG_FILE=/app/config.ini
+    healthcheck:
+      test: [ "CMD", "grpc_health_probe", "-addr=localhost:50051" ]
+      interval: 10s
+      timeout: 5s
+      retries: 3

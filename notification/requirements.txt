@@ -1,6 +1,5 @@
-setuptools==46.4.0
+grpcio
+grpcio-tools
 pytest
 behave
-grpcio==1.39.0
-grpcio-tools
-twilio
+ghasedak_sms

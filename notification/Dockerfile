@@ -1,4 +1,4 @@
-FROM python:3.10-slim
+FROM python:3.12.4-slim
 
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
@@ -6,7 +6,11 @@ ENV PYTHONUNBUFFERED=1
 WORKDIR /app
 
 COPY requirements.txt /app/
-RUN pip install --no-cache-dir -r requirements.txt
+
+RUN apt-get update && apt-get install -y g++ make && apt-get clean
+
+
+RUN pip install -r requirements.txt
 
 COPY . /app/
 
