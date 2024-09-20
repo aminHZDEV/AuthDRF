@@ -44,10 +44,11 @@ INSTALLED_APPS = [
     "behave_django",
     "features",
     "app.otp.otp_pb2",
-    "app.otp.otp_pb2_grpc"
+    "app.otp.otp_pb2_grpc",
 ]
 
-TEST_RUNNER = 'django_behave.runner.DjangoBehaveTestSuiteRunner'
+
+TEST_RUNNER = "django_behave.runner.DjangoBehaveTestSuiteRunner"
 
 
 REST_FRAMEWORK = {
@@ -67,6 +68,7 @@ OAUTH2_PROVIDER = {
         "write": "Write scope",
         "groups": "Access to your groups",
     },
+    "OAUTH2_VALIDATOR_CLASS": "app.utils.validator.MyOAuth2Validator",
 }
 
 MIDDLEWARE = [

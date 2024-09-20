@@ -7,7 +7,7 @@ def start_server():
     server_process = subprocess.Popen(
         ["python", "manage.py", "runserver"],
         stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE
+        stderr=subprocess.PIPE,
     )
 
     time.sleep(5)
